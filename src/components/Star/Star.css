@@ -1,6 +1,7 @@
 .Star input {
   display: none;
 }
+
 .Star > label {
   width: 30px;
   height: 30px;
@@ -8,14 +9,17 @@
   position: relative;
   font-family: Verdana;
 }
+
 .Star label::before {
   content: "\2606";
   font-size: 30px;
   position: absolute;
   top: 0px;
-  color: orange;
+  color: black;
   line-height: 30px;
 }
+
 .Star input:checked ~ label:before {
   content: "\2605";
+  color: gold;
 }

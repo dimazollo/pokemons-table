@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react"
-import classes from "./PokemonTable.module.css"
 import {
   fetchPokemons,
   selectCount,
@@ -9,6 +8,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
 import { Spinner } from "../Spinner/Spinner"
 import { PokemonTableRow } from "../PokemonTableRow/PokemonTableRow"
+import "./PokemonTable.css"
 
 export function PokemonTable() {
   const dispatch = useAppDispatch()
@@ -39,12 +39,12 @@ export function PokemonTable() {
   }
 
   return (
-    <>
-      <table className={classes.PokemonTable__Table}>
+    <div className="PokemonTable">
+      <table className="PokemonTable__Table">
         <thead>
           <tr>
             {["Picture", "Name", "Starred", "Stats"].map((colName) => (
-              <th className={classes.PokemonTable__Cell} key={colName}>
+              <th className="PokemonTable__Cell" key={colName}>
                 {colName}
               </th>
             ))}
@@ -56,7 +56,7 @@ export function PokemonTable() {
           ))}
         </tbody>
       </table>
-      <div className={classes.PokemonTable__PageButtons}>
+      <div className="PokemonTable__PageButtons">
         <button
           onClick={() => {
             const newOffset = offset - limit
@@ -65,7 +65,9 @@ export function PokemonTable() {
         >
           Previous
         </button>
-        <span>{`${offset + 1}-${offset + limit}`}</span>
+        <span className="PokemonTable__ShownRange">{`${offset + 1}-${
+          offset + limit
+        }`}</span>
         <button
           onClick={() => {
             const newOffset = offset + limit
@@ -75,6 +77,6 @@ export function PokemonTable() {
           Next
         </button>
       </div>
-    </>
+    </div>
   )
 }

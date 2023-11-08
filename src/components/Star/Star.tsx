@@ -1,4 +1,4 @@
-import classes from "./Star.module.css"
+import "./Star.css"
 
 interface StarProps {
   id: string
@@ -8,7 +8,7 @@ interface StarProps {
 
 export function Star({ id, checked, onClick }: StarProps) {
   return (
-    <div className={classes.Star}>
+    <div className="Star">
       <input
         type="checkbox"
         name={`pokemonId-${id}`}
