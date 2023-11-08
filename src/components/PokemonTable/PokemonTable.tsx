@@ -39,7 +39,7 @@ export function PokemonTable() {
   }
 
   return (
-    <div>
+    <>
       <table className={classes.PokemonTable__Table}>
         <thead>
           <tr>
@@ -75,6 +75,6 @@ export function PokemonTable() {
           Next
         </button>
       </div>
-    </div>
+    </>
   )
 }

@@ -81,6 +81,7 @@ export const fetchPokemons =
       dispatch(setCount(response.count))
 
       const starredPokemonNames = readStarredPokemonsFromLocalStorage()
+
       for (let { name: pokemonName } of response.results) {
         const pokemonData = await getPokemonByName(pokemonName)
 
