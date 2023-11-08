@@ -30,3 +30,5 @@ build
 *.local
 
 .idea
+
+.DS_Store
