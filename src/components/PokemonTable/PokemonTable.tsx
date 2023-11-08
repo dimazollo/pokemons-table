@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import classes from "./PokemonTable.module.css"
 import {
   fetchPokemons,
@@ -9,14 +9,23 @@ import {
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
 import { Spinner } from "../Spinner/Spinner"
 import { PokemonTableRow } from "../PokemonTableRow/PokemonTableRow"
+import { Star } from "../Star/Star"
 
 export function PokemonTable() {
   const dispatch = useAppDispatch()
+
   const limit = 5
   const [offset, setOffset] = useState(0)
 
+  // FIXME - можно удалить вот это и тогда будет 2 раза фетч первых данных
+  const mounted = useRef(false)
+
   useEffect(() => {
-    dispatch(fetchPokemons(limit, offset))
+    if (mounted.current) {
+      dispatch(fetchPokemons(limit, offset))
+    } else {
+      mounted.current = true
+    }
   }, [offset])
 
   const status = useAppSelector(selectStatus)
@@ -36,7 +45,7 @@ export function PokemonTable() {
       <table className={classes.PokemonTable__Table}>
         <thead>
           <tr>
-            {["Picture", "Name", "Stats"].map((colName) => (
+            {["Picture", "Name", "Starred", "Stats"].map((colName) => (
               <th className={classes.PokemonTable__Cell} key={colName}>
                 {colName}
               </th>
