@@ -1,45 +1,39 @@
-import { useGetPokemonByNameQuery } from "../../services/pokemon"
-import { Spinner } from "../Spinner/Spinner"
 import classes from "./PokemonTableRow.module.css"
+import { Pokemon } from "../../types"
 
 export type PokemonTableRowProps = {
-  name: string
+  pokemon: Pokemon
 }
 
-export function PokemonTableRow({ name }: PokemonTableRowProps) {
-  const { data, isLoading } = useGetPokemonByNameQuery({ name })
-
+export function PokemonTableRow({ pokemon }: PokemonTableRowProps) {
   return (
     <>
-      <tr key={name}>
+      <tr>
         <td className={classes.PokemonTableRow__DataCell}>
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            <img src={data?.sprites.front_default} alt={`image of ${name}`} />
-          )}
+          <img
+            src={pokemon.sprites.front_default}
+            alt={`image of ${pokemon.name}`}
+          />
         </td>
-        <td className={classes.PokemonTableRow__DataCell}>{name}</td>
+        <td className={classes.PokemonTableRow__DataCell}>{pokemon.name}</td>
         <td className={classes.PokemonTableRow__DataCell}>
-          {!isLoading && (
-            <table>
-              <tbody>
-                {data?.stats.map((item, i) => {
-                  // Restricts stats number for demo purposes
-                  if (i > 2) {
-                    return
-                  }
+          <table>
+            <tbody>
+              {pokemon.stats.map((item, i) => {
+                // Restricts stats number for demo purposes
+                if (i > 2) {
+                  return
+                }
 
-                  return (
-                    <tr key={item.stat.name}>
-                      <td>{item.stat.name}:</td>
-                      <td>{item.base_stat}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          )}
+                return (
+                  <tr key={item.stat.name}>
+                    <td>{item.stat.name}:</td>
+                    <td>{item.base_stat}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
         </td>
       </tr>
     </>

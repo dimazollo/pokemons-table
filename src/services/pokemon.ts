@@ -1,27 +1,20 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+const baseUrl = "https://pokeapi.co/api/v2/"
 
-export const pokemonApi = createApi({
-  reducerPath: "pokemonApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://pokeapi.co/api/v2/" }),
-  endpoints: (builder) => ({
-    getPokemonByName: builder.query<
-      GetPokemonByNameResponse,
-      GetPokemonByNameArgs
-    >({
-      query: ({ name }) => `pokemon/${name}`,
-    }),
+export const getPokemonByName = async (
+  name: string,
+): Promise<GetPokemonByNameResponse> => {
+  const data = await fetch(baseUrl + "pokemon/" + name)
+  const json = await data.json()
+  return json
+}
 
-    getPokemons: builder.query<GetPokemonsResponse, GetPokemonsArgs>({
-      query: ({ limit = 10, offset = 0 }) => {
-        return `pokemon?limit=${limit}&offset=${offset}`
-      },
-    }),
-  }),
-})
-
-interface GetPokemonsArgs {
-  limit?: number
-  offset?: number
+export const getPokemons = async (
+  limit: number,
+  offset: number,
+): Promise<GetPokemonsResponse> => {
+  const data = await fetch(baseUrl + `pokemon?limit=${limit}&offset=${offset}`)
+  const json = await data.json()
+  return json
 }
 
 interface GetPokemonsResponse {
@@ -50,8 +43,3 @@ interface GetPokemonByNameResponse {
   height: number
   weight: number
 }
-
-interface GetPokemonByNameArgs {
-  name: string
-}
-export const { useGetPokemonByNameQuery, useGetPokemonsQuery } = pokemonApi

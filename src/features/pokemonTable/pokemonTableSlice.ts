@@ -1,14 +1,18 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState, AppThunk } from "../../store/store"
+import { Pokemon } from "../../types"
+import { getPokemonByName, getPokemons } from "../../services/pokemon"
 
-export interface CounterState {
-  value: number
+export interface PokemonTableState {
+  count: number
   status: "idle" | "loading" | "failed"
+  pokemons: Array<Pokemon>
 }
 
-const initialState: CounterState = {
-  value: 0,
+const initialState: PokemonTableState = {
+  count: 0,
   status: "idle",
+  pokemons: [],
 }
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -25,16 +29,19 @@ export const incrementAsync = createAsyncThunk(
   },
 )
 
-export const counterSlice = createSlice({
+export const pokemonTableSlice = createSlice({
   name: "counter",
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    increment: (state) => {
-      state.value += 1
+    setPokemons: (state, action: PayloadAction<Array<Pokemon>>) => {
+      state.pokemons = action.payload
     },
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload
+    setCount: (state, action: PayloadAction<number>) => {
+      state.count = action.payload
+    },
+    setStatus: (state, action: PayloadAction<PokemonTableState["status"]>) => {
+      state.status = action.payload
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -54,22 +61,38 @@ export const counterSlice = createSlice({
   },
 })
 
-export const { increment, incrementByAmount } = counterSlice.actions
+export const { setCount, setPokemons, setStatus } = pokemonTableSlice.actions
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-// export const selectCount = (state: RootState) => state.counter.value
+export const selectCount = (state: RootState) => state.pokemonTable.count
+export const selectPokemons = (state: RootState) => state.pokemonTable.pokemons
+export const selectStatus = (state: RootState) => state.pokemonTable.status
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.
-export const incrementIfOdd =
-  (amount: number): AppThunk =>
-  (dispatch, getState) => {
-    // const currentValue = selectCount(getState())
-    // if (currentValue % 2 === 1) {
-    dispatch(incrementByAmount(amount))
-    // }
+export const fetchPokemons =
+  (limit: number, offset: number): AppThunk =>
+  async (dispatch, getState) => {
+    dispatch(setStatus("loading"))
+
+    const pokemons: Pokemon[] = []
+
+    try {
+      const response = await getPokemons(limit, offset)
+      dispatch(setCount(response.count))
+
+      for (let { name: pokemonName } of response.results) {
+        const pokemonData = await getPokemonByName(pokemonName)
+        pokemons.push(pokemonData)
+      }
+
+      dispatch(setPokemons(pokemons))
+      dispatch(setStatus("idle"))
+    } catch (e) {
+      dispatch(setStatus("failed"))
+    }
   }
 
-export default counterSlice.reducer
+export default pokemonTableSlice.reducer

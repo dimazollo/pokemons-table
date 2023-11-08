@@ -1,23 +1,33 @@
-import { useState } from "react"
-import { useGetPokemonsQuery } from "../../services/pokemon"
+import { useEffect, useState } from "react"
+import classes from "./PokemonTable.module.css"
+import {
+  fetchPokemons,
+  selectCount,
+  selectPokemons,
+  selectStatus,
+} from "../../features/pokemonTable/pokemonTableSlice"
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
 import { Spinner } from "../Spinner/Spinner"
 import { PokemonTableRow } from "../PokemonTableRow/PokemonTableRow"
-import classes from "./PokemonTable.module.css"
 
 export function PokemonTable() {
+  const dispatch = useAppDispatch()
   const limit = 5
   const [offset, setOffset] = useState(0)
 
-  const { data, isError, isFetching } = useGetPokemonsQuery({
-    limit,
-    offset,
-  })
+  useEffect(() => {
+    dispatch(fetchPokemons(limit, offset))
+  }, [offset])
 
-  if (isFetching) {
+  const status = useAppSelector(selectStatus)
+  const pokemons = useAppSelector(selectPokemons)
+  const count = useAppSelector(selectCount)
+
+  if (status === "loading") {
     return <Spinner />
   }
 
-  if (isError) {
+  if (status === "failed") {
     return "An error occurred while fetching"
   }
 
@@ -34,8 +44,8 @@ export function PokemonTable() {
           </tr>
         </thead>
         <tbody>
-          {data?.results.map((item) => (
-            <PokemonTableRow key={item.name} name={item.name} />
+          {pokemons.map((item) => (
+            <PokemonTableRow key={item.id} pokemon={item} />
           ))}
         </tbody>
       </table>
@@ -52,7 +62,7 @@ export function PokemonTable() {
         <button
           onClick={() => {
             const newOffset = offset + limit
-            setOffset(newOffset > data!.count ? offset : newOffset)
+            setOffset(newOffset > count ? offset : newOffset)
           }}
         >
           Next
