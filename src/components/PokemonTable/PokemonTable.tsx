@@ -9,7 +9,6 @@ import {
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks"
 import { Spinner } from "../Spinner/Spinner"
 import { PokemonTableRow } from "../PokemonTableRow/PokemonTableRow"
-import { Star } from "../Star/Star"
 
 export function PokemonTable() {
   const dispatch = useAppDispatch()
@@ -17,7 +16,6 @@ export function PokemonTable() {
   const limit = 5
   const [offset, setOffset] = useState(0)
 
-  // FIXME - можно удалить вот это и тогда будет 2 раза фетч первых данных
   const mounted = useRef(false)
 
   useEffect(() => {

@@ -4,7 +4,6 @@ import { Pokemon } from "../../types"
 import { getPokemonByName, getPokemons } from "../../services/pokemon"
 import {
   readStarredPokemonsFromLocalStorage,
-  starredPokemonsLSKey,
   writeStarredPokemonsToLocalStorage,
 } from "./utils"
 
