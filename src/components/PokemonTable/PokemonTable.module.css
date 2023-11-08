@@ -1,0 +1,18 @@
+.PokemonTable__PageButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.PokemonTable__Table {
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+.PokemonTable__Cell {
+  border: 1px solid black;
+}
+/*table,*/
+/*table td,*/
+/*table th {*/
+/*  border: 1px solid black;*/
+/*}*/
