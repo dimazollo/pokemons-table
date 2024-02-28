@@ -13,7 +13,7 @@ import "./PokemonTable.css"
 export function PokemonTable() {
   const dispatch = useAppDispatch()
 
-  const limit = 5
+  const limit = 4
   const [offset, setOffset] = useState(0)
 
   const mounted = useRef(false)
