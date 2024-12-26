@@ -1,30 +1,26 @@
 const baseUrl = "https://pokeapi.co/api/v2/"
 
-export const getPokemonByName = async (
-  name: string,
-): Promise<GetPokemonByNameResponse> => {
+export const getPokemonByName = async (name: string) => {
   const data = await fetch(baseUrl + "pokemon/" + name)
   const json = await data.json()
   return json
 }
 
-export const getPokemons = async (
-  limit: number,
-  offset: number,
-): Promise<GetPokemonsResponse> => {
+// @ts-ignore
+export const getPokemons = async (limit: number, offset: number): any => {
   const data = await fetch(baseUrl + `pokemon?limit=${limit}&offset=${offset}`)
   const json = await data.json()
   return json
 }
 
-interface GetPokemonsResponse {
+export interface GetPokemonsResponse {
   count: number
   next: string
   previous: string | null
   results: Array<{ name: string; url: string }>
 }
 
-interface GetPokemonByNameResponse {
+export interface GetPokemonByNameResponse {
   id: number
   name: string
   sprites: {

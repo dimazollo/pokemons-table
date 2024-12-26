@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import {
   fetchPokemons,
   selectCount,
@@ -16,14 +16,8 @@ export function PokemonTable() {
   const limit = 4
   const [offset, setOffset] = useState(0)
 
-  const mounted = useRef(false)
-
   useEffect(() => {
-    if (mounted.current) {
-      dispatch(fetchPokemons(limit, offset))
-    } else {
-      mounted.current = true
-    }
+    dispatch(fetchPokemons(limit, offset))
   }, [offset])
 
   const status = useAppSelector(selectStatus)

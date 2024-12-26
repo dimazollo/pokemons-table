@@ -1,7 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState, AppThunk } from "../../store/store"
 import { Pokemon } from "../../types"
-import { getPokemonByName, getPokemons } from "../../services/pokemon"
+import {
+  getPokemonByName,
+  GetPokemonByNameResponse,
+  getPokemons,
+  GetPokemonsResponse,
+} from "../../services/pokemon"
 import {
   readStarredPokemonsFromLocalStorage,
   writeStarredPokemonsToLocalStorage,
@@ -77,13 +82,16 @@ export const fetchPokemons =
     const pokemons: Pokemon[] = []
 
     try {
-      const response = await getPokemons(limit, offset)
+      const response = (await getPokemons(limit, offset)) as GetPokemonsResponse
+
       dispatch(setCount(response.count))
 
       const starredPokemonNames = readStarredPokemonsFromLocalStorage()
 
       for (let { name: pokemonName } of response.results) {
-        const pokemonData = await getPokemonByName(pokemonName)
+        const pokemonData = (await getPokemonByName(
+          pokemonName,
+        )) as GetPokemonByNameResponse
 
         pokemons.push({
           id: pokemonData.id,
